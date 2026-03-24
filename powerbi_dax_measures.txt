@@ -1,0 +1,22 @@
+// 1. Accuracy Metric (Used in the Accuracy Improvement Project)
+Report Accuracy % = 
+DIVIDE(
+    COUNTROWS(FILTER('SalesData', 'SalesData'[Is_Validated] = "True")),
+    COUNTROWS('SalesData'),
+    0
+)
+
+// 2. Month-over-Month Growth (KPI Tracking)
+MoM Sales Growth = 
+VAR CurrentMonthSales = [Total Sales]
+VAR PreviousMonthSales = CALCULATE([Total Sales], DATEADD('Calendar'[Date], -1, MONTH))
+RETURN
+DIVIDE(CurrentMonthSales - PreviousMonthSales, PreviousMonthSales, 0)
+
+// 3. Dynamic Status Label (Stakeholder Reporting)
+Data Status = 
+SWITCH(TRUE(),
+    [Report Accuracy %] > 0.95, "✅ High Quality",
+    [Report Accuracy %] > 0.85, "⚠️ Review Needed",
+    "❌ Data Critical"
+)
